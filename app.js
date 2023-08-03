@@ -8,6 +8,9 @@ var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var authRouter = require('./routes/auth');
+var booksRouter = require('./routes/books');
+var activitiesRouter = require('./routes/activities');
 
 var app = express();
 
@@ -20,17 +23,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('trust proxy', 1);
 app.enable('trust proxy');
 
-app.use(
-    cors({
-      origin: [process.env.REACT_APP_URI]  // <== URL of our future React app
-    })
-  );
 // app.use(
-//     cors()
+//     cors({
+//       origin: [process.env.REACT_APP_URI]  // <== URL of our future React app
+//     })
 //   );
+app.use(
+    cors()
+  );
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter);
+app.use('/books', booksRouter);
+app.use('/activities', activitiesRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI)
