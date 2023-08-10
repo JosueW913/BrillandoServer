@@ -7,7 +7,6 @@ const User = require('../models/User');
 //Required Middleware
 const isAuthenticated = require('../middleware/isAuthenticated');
 const isProfileOwner = require('../middleware/isProfileOwner');
-const Activity = require('../models/Activity');
 
 //Routes
 router.get('/user-detail/:userId', (req, res, next) => {

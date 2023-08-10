@@ -2,10 +2,10 @@ const Book = require('../models/Book')
 
 const isBookOwner = (req, res, next) => {
 
-    Book.findById(req.params.id)
+    Book.findById(req.params.bookId)
         .then((foundBook) => {
             
-            if(req.body.owner === foundBook.owner.toString()) {
+            if(req.user._id === foundBook.owner.toString()) {
                 next()
             } else {
                 res.status(401).json({message: 'Validation Error'})

@@ -13,6 +13,11 @@ const isBookOwner = require('../middleware/isBookOwner')
 router.get('/', (req, res, next) => {
   
     Book.find()
+        .populate('owner')
+        .populate({
+            path: 'comments',
+            populate: { path: 'author' }
+        })
         .then((allBooks) => {
             res.json(allBooks)
         })
@@ -25,12 +30,13 @@ router.get('/', (req, res, next) => {
 
 router.post('/new-book', isAuthenticated, (req, res, next) => {
 
-    const { owner, image, ageLevel, subject, description } = req.body
+    const { owner, image, title, ageLevel, subject, description } = req.body
 
     Book.create(
         { 
             owner, 
             image, 
+            title,
             ageLevel, 
             subject, 
             description
@@ -69,18 +75,24 @@ router.post('/book-update/:bookId', isAuthenticated, isBookOwner, (req, res, nex
 
     const { bookId } = req.params
 
-    const { image, ageLevel, subject, description } = req.body
+    const { image, title, ageLevel, subject, description } = req.body
 
     Book.findByIdAndUpdate(
         bookId,
         { 
             image, 
+            title,
             ageLevel, 
             subject, 
             description 
         },
         { new: true}
     )
+        .populate('owner')
+        .populate({
+            path: 'comments',
+            populate: { path: 'author' }
+        })
         .then((updatedBook) => {
             res.json(updatedBook)
         })

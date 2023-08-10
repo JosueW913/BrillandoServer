@@ -2,10 +2,11 @@ const Activity = require('../models/Activity')
 
 const isActivityOwner = (req, res, next) => {
 
-    Activity.findById(req.params.id)
+    Activity.findById(req.params.activityId)
         .then((foundActivity) => {
+            console.log("Found Activity ==>", foundActivity)
             
-            if(req.body.owner === foundActivity.owner.toString()) {
+            if(req.user._id === foundActivity.owner.toString()) {
                 next()
             } else {
                 res.status(401).json({message: 'Validation Error'})

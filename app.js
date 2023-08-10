@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var booksRouter = require('./routes/books');
 var activitiesRouter = require('./routes/activities');
+var imageRouter = require('./routes/image')
 
 var app = express();
 
@@ -37,6 +38,7 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/books', booksRouter);
 app.use('/activities', activitiesRouter);
+app.use('/image', imageRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI)

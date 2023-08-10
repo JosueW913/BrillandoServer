@@ -6,6 +6,7 @@ const activitySchema = new Schema (
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
+        title: String,
         image: String,
         ageLevel: String,
         subject: String,

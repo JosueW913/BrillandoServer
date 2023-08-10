@@ -13,6 +13,11 @@ const isActivityOwner = require('../middleware/isActivityOwner')
 router.get('/', (req, res, next) => {
   
     Activity.find()
+        .populate('owner')
+        .populate({
+            path: 'comments',
+            populate: { path: 'author' }
+        })
         .then((allActivities) => {
             res.json(allActivities)
         })
@@ -25,12 +30,13 @@ router.get('/', (req, res, next) => {
 
 router.post('/new-activity', isAuthenticated, (req, res, next) => {
 
-    const { owner, image, ageLevel, subject, materials, procedures } = req.body
+    const { owner, title, image, ageLevel, subject, materials, procedures } = req.body
 
     Activity.create(
         { 
             owner, 
             image, 
+            title,
             ageLevel, 
             subject, 
             materials, 
@@ -70,12 +76,13 @@ router.post('/activity-update/:activityId', isAuthenticated, isActivityOwner, (r
 
     const { activityId } = req.params
 
-    const { image, ageLevel, subject, materials, procedures } = req.body
+    const { image, title, ageLevel, subject, materials, procedures } = req.body
 
     Activity.findByIdAndUpdate(
         activityId,
         { 
             image, 
+            title,
             ageLevel, 
             subject, 
             materials, 
@@ -83,6 +90,11 @@ router.post('/activity-update/:activityId', isAuthenticated, isActivityOwner, (r
         },
         { new: true}
     )
+        .populate('owner')
+        .populate({
+            path: 'comments',
+            populate: { path: 'author'}
+        })
         .then((updatedActivity) => {
             res.json(updatedActivity)
         })
